@@ -1,0 +1,122 @@
+
+
+
+https://www.youtube.com/watch?v=YR7Vp7HcAgs
+
+How Hashmap works
+
+
+
+
+key HashCode() -> hash value used to calculate bucket
+
+1 hash table of buckets
+n linkedlist of nodes per bucket .. each node has key, value and pointer to next node in bucket
+
+
+
+How is hahmap consructed by default
+
+
+default value of DEFULT_INITIAL_CAPACITY is 16 in hashmap 
+number of buckets as power f 2
+
+
+default valueof load factro is .75
+if exceded--hash table buckets are ncread by x*2 and all buckets refreshed
+
+
+
+What is ahash function
+hascode() function ehich returns an integer value, used by hashmap to find a correct bucket
+
+
+what is a hashmap bucket
+used simple linked lst to stpre objcts
+
+cam have multiple ly-value apirs
+
+Map.Entry  == hash,key,value, NextNodereferecen
+
+
+
+How does Hashmap get(key K) method works
+
+checks whether key is null or not (only one nul key possible)
+calls hasCode emthos on the key object
+appies returnd hashValue to itsownstatsic hash functio(it defends against poor qulity hasg function) to find a bucket location(backing array)
+
+if in single bucket 2 entries ahs same hash vakue--then uses key.equals()
+
+
+
+
+How does put(k,v) work?
+
+by definition, the put command replaces th revious vale associatedd wththr goven key in the map
+
+
+
+
+What is HasCode colliosn
+two diff objet prodcu ewqaul hascode
+
+Difference beteeen HashTabea dn HAshMap
+
+hashtable is synchronized while hashmap is not
+hashtable dose nt allow null key values.hahmap allow one null key value andmany null vlaues
+
+oneof the Hashmap cubclases is linkedHashMap, so in the eevent that you want predictable iteration order(whic is insertioj order byd efault), yu could easily sqap out the hashmap fr linked hashMap
+
+This wouldn;t be easu if U use hasjtabel
+
+ConcurrentHashMap -- thread safe chec then act semantics such as
+	ConcurrentMap.putIfAbsent(key,value);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

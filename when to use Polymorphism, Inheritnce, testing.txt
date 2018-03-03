@@ -1,0 +1,333 @@
+
+
+https://www.youtube.com/watch?v=4F72VULWFvc
+
+When to use Polymorphism:
+same function/object behaving different based on conditions.
+
+compile time poly..i.e method overloading
+run time poly: method overridn
+
+behaviour changes based on state
+parallel consitions are in multiple places in code
+
+
+
+Do not use if stateements in your code, use proper polymorphism
+
+
+In object orieted, all behaviour must ahve it own class or methods
+
+
+
+
+
+Most ifs can be relaced by polymorphism
+smal talk language dosen't have if
+
+
+why?
+functions without ifs are easier to read
+functions without if are easier to test
+polymorphic syatem are easier to mantain
+
+Use  polymorphism:
+if an object should behave differently based n it sate
+if oyu ahve to check same considiton in multiple places
+
+mainly to od comparison of premitove objetcs < > == !=
+
+there other ises but today we are talimg dif
+
+
+To be if free
+never retrun anull,instead return a null Object eg empty list
+
+Don't return error codesinstead thorow exception (runtime please)
+
+
+
+Rampant subclassing
+
+polumorphism suses subclassing
+
+
+be caredul abou it runway subclassng
+
+
+State baesd behaviour:
+
+Replace conditions with polymorphism
+you have a consdition that chooses different behaviour depending on type od object
+
+move eacg leg of the consitions to n overriding method in a subclass.Make original method abstract
+
+
+
+Model this 1+2*3
+you can reprsent ths usign tree...its like representing expression tree
+
+1st revison:
+class Node {
+	double value;
+	char operator;
+	Node left;
+	Node right;
+	double evaluate() {
+		switch(opeartior) {
+			case '#' : return value;
+			case '+' : return left.evaluate() + right.evaluate();
+			case '*' : return left.evaluate() * right.evaluate();
+			case '...' : /* edit this for each new operator */
+		}
+	}
+}
+
+But now each opeator node will also havea  value 0 by defaukt which make sno sense.. also valueNode i.e left node and Opertpr Node bahave diffeently and should not be togrther..sign for more efactring i  subsclases
+
+2nd revision:
+abstract class Node {
+	abstract double evalutte();
+}
+
+class ValueNode extends Node {
+	double value;
+	double evalutate() {
+		return value;
+	}
+}
+
+class OpNode extends Node {
+	char operator;
+	Node left;
+	Node right;
+	double evaluate() {
+		switch(opeartior) {
+			case '+' : return left.evaluate() + right.evaluate();
+			case '*' : return left.evaluate() * right.evaluate();
+			case '...' : /* edit this for each new operator */
+		}
+	}
+}
+
+
+Problem here is OpNode is still changing behaviour based on operator and using swuiatch,..sign that it can be refactored more in diff sub classes
+
+3rd revision:
+abstract class Node {
+	abstract double evalutte();
+}
+
+class ValueNode extends Node {
+	double value;
+	double evalutate() {
+		return value;
+	}
+}
+
+class abstract OpNode extends Node {
+	Node left;
+	Node right;
+	abstract double evaluate();
+}
+
+/* No operator and value node.bcz they don't depend on it directly */
+class AdditionNode extend OpNode {
+	double evaluate() {
+		return left.evaluate() + right.evalauate();
+	}
+}
+
+class MultiplicationNode extend OpNode {
+	double evaluate() {
+		return left.evaluate() * right.evalauate();
+	}
+}
+
+
+Further exploration
+
+define toSteing() prints the infix expression placing parantheses only when necessary
+add new math operator; exponention, factorail,logrithm, trignometry,etc without breaking anything or knowing entire code base
+
+
+
+Summary:
+a polymorphic solution is often better because:
+new behaviour can be added without having the original source code
+each operation/concern is separated in a separate file which makes it easy to test /understand
+	i.e everytiog veaviur specfic to addiot will go i addition class,etc
+
+prefer polymorphism over conditions
+w
+switch almost alwasy means you should use polymorphism
+if is more stuble..someime as if is just if
+
+
+When If have multiple same condition:
+we are checing for same flag over diff function, its asign that it needs polymorphism
+
+class Update {
+	ececute() {
+		if(FLAG_il8n_ENABLED) {
+			/* Do A */
+		} else {
+			/* Do B */
+		}
+	}
+
+	render() {
+		if(FLAG_il8n_ENABLED) {
+			/* render A */
+		} else {
+			/* render B */
+		}
+	}	
+}
+
+Do A and render A can be done togeher but not bothif condition.. so we ca put them in diff class
+
+How to test:
+testing become diffeicult as you hav to test allpossible combination which ends up wth checkng conbination which nver happen in production..
+
+void testEcecuteDoA {
+	FLAG_il8n_EBABLED = true;
+	Update u = new Update();
+	u.execute();
+	assertX();
+
+}
+
+void testEcecuteDoB {
+	FLAG_il8n_EBABLED = false;
+	Update u = new Update();
+	u.execute();
+	assertX();
+
+}
+
+
+
+
+
+
+
+How to polymorphci ths :
+
+abstract class Update {
+	
+}
+
+class IL8NUpdate etend Update {
+	execute () {
+		// Do A
+	}
+
+	render() {
+		// render A
+	}
+}
+
+class NonIL8NUpdate exyends Update {
+	execute () {
+		// Do B
+	}
+
+	render() {
+		// render B
+	}
+}
+
+
+
+How to test :
+vid testExecuteDoA {
+	Update u = new IL8NUpdate();
+	u.execute();
+	assertX();
+}
+
+
+vid testExecuteDoB {
+	Update u = new NonIL8NUpdate();
+	u.execute();
+	assertX();
+}
+
+
+
+whre did the ifs Go?
+we move them to pile of construction, factories,etc..we make the instantiate clas once and store it for lifetime  and JVM ut in inline
+all if go inot factorsi to instantioate based on some condition whic objecy need t be instantiate
+
+class COnsumer {
+	Consumer(Update u) {
+		// ...
+	}
+}
+
+class Factory {
+	Consumer build() {
+		Update u = FLAG_il8n_ENABLED? mew IL8NUpdate(): new NonIL8NUpdate();
+		return new Consumer(u);
+	}
+}
+
+
+
+Two Piles
+
+piles of objects
+business logic the fun stuff
+reposnibel for business logic, domain abstrction
+given the collabrators needed
+
+
+pile sof construction
+factories
+builders
+provides<T>
+responsible for buildign obejcy graphs
+create and porvide collaborators(Dependncy inhjection)
+
+
+
+
+Benifits:
+consiton is localized inone place .. not all segeration is localized and multiple if is oved to factories
+no moreduplication..single if only..not spread across files same ifs
+sgragation of responsibilty and global state... we move ut xreation to factories and ifs to factorieswhile creation instntancs
+
+Common code in one location
+testing independnt;y easily ad in parallel
+looking at the subclasses makes it clear what the difference are
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

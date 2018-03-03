@@ -1,0 +1,76 @@
+difference between == vs equals()
+
+
+
+== compares object reference
+String x ="Hello";
+String y = "Hello";
+System.out.println(x==y); //true
+
+but 
+String x = new String("Hello");
+String y = new String("Hello");
+System.out.println(x==y); //false
+
+equals copares objetc contents
+
+
+equals:
+
+String x ="Hello";
+String y = "Hello";
+System.out.println(x.equals(y)); //true
+
+String x = new String("Hello");
+String y = new String("Hello");
+System.out.println(x.equals(y)); //true
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

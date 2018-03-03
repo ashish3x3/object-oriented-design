@@ -1,0 +1,317 @@
+
+
+
+DEPENDENCY INjection:
+
+
+class --uses(depemdency)--> other class
+model --fetch--> databse(dependency)..database is pushed to mdoel from outsode..no new keyword in the constructor intead pass the requried onject as  a paramter
+
+Injecting dependency
+
+publci function COntructor(Databse db) {
+	/* That's it' ..No class, intantance creation,etc*/
+}
+
+Taking a door from a manufacures nd installing is bettet han creating door everytime
+
+
+what if many classs needs different depemdecy:
+solution is Dependncy Injection container
+
+class1 => array('dependency1,dependecny2,..');
+class2 => array(dependecy4,dependecy8,...)
+
+now getDependecy for a class will get dependecy list from stored class, check if its already instantioted and use it, if not create and store ti and use it..
+
+var obj1 = getDependency('class1')
+
+
+
+COnstruction best practive:
+
+idely we need only assignmants indei the construct. you ask for what you need and assign them insdeo ocnstructr,rather thn creating it indeode them.
+
+
+Law of Demeter:
+ask for things and not construct them manually.
+
+For example a car should get engine as paramener rather than creating a factory calling it and then use facory method to construct engine instance.ask for things andnot construct
+
+
+
+
+Service Locator:
+aka context
+other name this anti-apttern can be disguised as:
+Registry, Locator, Context, Mnager, Handler, Environemt, Principle
+
+Class House {
+	Door door;
+	Window window;
+	Roof roof;
+
+
+	House(Locatot locator) {
+		door = locator.getDoor();
+		window = locator.getWindow();
+		roof = locator.getRoof();
+	}
+
+}
+
+But is still problem with testing House class
+/* You needs to instantiate roof, window,etc and then instantiate a locator and then call setmethods to set dif parts and then call House constructor */
+
+Its hard totest when U add another depandency like plumbing, but your locator dosen't have it and now U have to share servei lcator to add any thinf new..noe very user freindly
+
+class HouseTest {
+	public void testServieLocator() {
+		Door d = new Door(...);
+		Roof r = new Roof(...);
+		Window w = new Window(...);
+		Locator loc = new Locator();
+		loc.setRoof(r);
+		loc.setDoor(d);
+		loc.setWindow(w);
+
+		House h - new House(loc);
+	}
+}
+
+instead of this use what U only need. like pass door, winfow and roof as houe paramneter
+
+House( Door d, Window w, Roof r) {}
+
+
+House h = new House(d,w,r);
+this time hoiuse has a very claer API shown via the constructor..
+
+
+
+
+
+Mixing Responsibility:
+	Lookup
+	factory
+
+
+Need to have an interface for testing
+
+Anything which deoands on Service Locator depends on everything else
+
+
+
+
+
+Law of Demeter:
+Imagine you are in a store and the item you are purchasing in $25
+do you give the clerk$25
+or do you give him the wallet and let him retrieve the $25..
+
+/* Law of Demeter: Violated */
+
+class Goods {
+	AccountsReceivable ar;
+	void purchase(CUstomer c) {
+
+		/* get the wallet and then take the money */
+		Money m = c.getWallet().getMoney();
+		ar.recordSale(this, m);
+	}
+}
+
+
+
+/* Law of Demeter: Obeyed */
+
+Class Goods {
+	AccountsReceivable ar;
+
+	/* Now we are taking only what matters i.e money  */
+	void pircjase(Money m) {
+		ar.recordSale(this,m);
+	}
+}
+
+
+class GoodTest {
+	void testPurhaseTheRightWay() {
+		AccountReceivable ar = new MockAR();
+		Goods g = new Goods(ar);
+		g.purchase(new Money(25, USD));
+		assertEquals(25, ar.getSales());
+	}
+}
+
+
+you should alwasy diectlu ask for stuff that is needed and onot intermediatery obejct thrugh which then U will fetch required stuff..and this is what fundamentally wrong with servece locator than you first ask for loctor and then try to fet what U need tfrom it..  
+
+youa only ask for obejcts which you directly opearte on
+a.getX().getY().getCustId()... is a dead giveway. Good luck testing that..
+servceLocator.getService() is breaking the law of demeter
+Dependency injection of specficobject you need.. Hollywood principle
+
+
+
+
+Myths about dependency injection
+
+1. DI makes refactoring hard
+	if a child object needsa new parameter then I have to pass it through alll its parents
+		this si not true as this ill break lar of demeter..a call should only ask if it opeartes on it directly.
+
+
+Class House {
+	House(Door door) {...}
+}
+
+class Door {
+	door( DoorKnob knob) {...}
+}
+
+class DoorKnob {
+	DoorKnob() {...}
+}
+
+
+
+class HouseFactory {
+	House build () {
+		DoorKnob knob = new DoorKnow();
+		Door door =new Door(knob);
+		rturn new House(door);
+	}
+}
+
+
+Now if your requiremnts changed, and U need to add color and wndoe to door, myth is you need to pass it along from theconstructr to child but in reality tht wil break law of demeter..if house dosen't need to opeate directly on doorknow,etc even house dosen;t cre if dorr and acolored doorknow or not, it all cares that if needd a door for it construction which it pases to factor for its constructin. Factory will take care of such construction..
+
+
+Class House {
+	House(Door door) {...}
+}
+
+class Door {
+	door( DoorKnob knob, Window window) {...}
+}
+
+class DoorKnob {
+	DoorKnob(Color color) {...}
+}
+
+
+class HouseFactory {
+	House build () {
+	Color colr = Color.RED;
+		DoorKnob knob = new DoorKnow(color);
+		Window window = new SamllWindow();
+		Door door =new Door(knob, window);
+		rturn new House(door);
+	}
+}
+
+
+
+
+2. Because of law of demeter you should never ask for anything you don't need directl;y
+
+
+3. Parent Object dose not make a child it ask for child. So if child needs a new dependency the parent is not aware of it
+
+
+Rules about Dependency Injection:
+
+Object lifetime:
+construction injection:
+	only inject objects whose lifetime is rqual to or greater then the ijectee... 
+	A house should only ask for Door if Door lifetime is atleast equal to House or greter..
+
+Pass in as Method Parameter at the time of execution
+	object whose lifetime is soorter than the injectee...
+	i.e instead of asking it during constructor, ask during some methodXYZ(dependecy Inject) execution insde that class
+
+
+
+
+
+NULL CHECKING:
+
+check during execution and not during precondition. it makes it harder to test
+
+class House {
+	HOuse(Door door) {
+		Preconditions.checkForNull(door);
+		this.door = door;
+	}
+
+	void paint(Color color) { ... }
+
+}
+
+void testHousePaintng() {
+
+	/* Passing a NULL in test says, this is of no interest, and it is great way to write clean tests. Preconditions makes it hareder o test.
+		In this all we care about is wheter the house is painterd red or not and noth caring about Door but precondition nul checking will make it haredr..
+	*/
+	House house = new House(null);
+	house.paint(Color.RED);
+
+	/* A passing test assert is lot more about he quality of code than precnsditions check.. */
+	assertEquals(Color.RED, house.getCOlor());
+}
+
+It make sense if you re using an external API to check for NULL, etc but if  doignf or internal this means U r not sure about your code..
+
+
+
+Test vs Production
+
+pass in null     Production(No)     Test(Yes)
+
+call new         Production(No)     Test(Yes)
+
+instead of passing null inproduction, pas empty collection. you should aleay expect a ligit obejct in production whre U can all methds on..
+
+new shoudl be on factory or test... having null in test make sense t tell that we don't care about this for this test.. but not in production..
+
+
+Always ask for things
+
+Abandon the new operator in 99% of your domain classes
+	all the new operators end up with application configuration objects(which either works or dosen't -- integation tested)
+	instating hash mpa with new is not a problem as with hashmap thee is nothing behind the door..it end of raod thger..so ir dsen't create any problem
+
+Don't ask for indirect deendncy..obey law of demeter
+
+
+Two Piles
+
+1. Pileof Objects
+	business logic
+	this is why U r writing code
+	Gets the collaborators needed (law of demeter)
+
+2. pile of New Keywords
+	Provide<T> objects
+	Factories
+	Builders
+	this is how U get tghe code U write to work together
+	dependedny injeted managed (send what id requred as DI)
+
+
+When you separate your two piles
+
+small test are easy to write and understnd
+	happen naturally when using DI
+
+when verything worksi integration tests..
+
+when the wiring is wrong
+	Failure
+	scenario tests are needed to ensure that objects are wired together properly
+when the system fails in some small way
+	bug with specific class, missing unit test
+
+
+

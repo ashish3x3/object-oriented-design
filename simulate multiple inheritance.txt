@@ -1,0 +1,99 @@
+How to simulate multiple inheritance
+
+
+
+
+Interface is used..
+
+public class Dog implements Interface1,Interface2 {
+	@Override
+	public void func1() {}
+
+	@Override
+	public void func1() {}
+
+	...
+}
+
+Interface1 i1 = new Dog();
+Interface2 i2 = new Dog();
+
+
+extends dose not allow 2 extension
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

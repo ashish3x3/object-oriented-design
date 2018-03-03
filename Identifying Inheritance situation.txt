@@ -1,0 +1,121 @@
+
+
+
+Object-oriented design: Identifying an inheritance situation
+
+anything which depects IS_A relationhip is a inheritance candidate
+
+A car IS_A vehicle
+A bus IS_A vehicle
+AN employee IS_A person
+A customer IS_A person
+A checking/saving account IS_A kind of bank account
+
+
+
+Wrong relationship
+A car IS_A bus
+A customer IS_A shopping cart
+
+Composition example HAS_A
+Bank HAS_A bank account..not inheritance
+
+
+Any framework use inheritance extensively. bcz all wants to provide generic functionalty rathe than writin specfic one.
+for example in JAVA there is fileDialog class wich inherits from..
+
+FILEDIALOG <--- DIALOG <--- WINDOW <--- CONTAINER <--- COMPONENT <--- OBJECT 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
